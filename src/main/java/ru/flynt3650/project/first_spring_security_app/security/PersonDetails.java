@@ -1,12 +1,10 @@
 package ru.flynt3650.project.first_spring_security_app.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.flynt3650.project.first_spring_security_app.models.Person;
 
 import java.util.Collection;
-import java.util.List;
 
 public class PersonDetails implements UserDetails {
     private final Person person;
