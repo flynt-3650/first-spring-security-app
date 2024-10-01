@@ -4,32 +4,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.flynt3650.project.first_spring_security_app.security.AuthProviderImpl;
+import ru.flynt3650.project.first_spring_security_app.services.PersonDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final AuthProviderImpl authProvider;
+    private final PersonDetailsService personDetailsService;
 
     @Autowired
-    public SecurityConfig(AuthProviderImpl authProvider) {
-        this.authProvider = authProvider;
+    public SecurityConfig(PersonDetailsService personDetailsService) {
+        this.personDetailsService = personDetailsService;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .anyRequest()
-                        .authenticated())
-                .formLogin(withDefaults -> {})
-                .logout(withDefaults -> {});
+
+        http.authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().authenticated()) // Requires all requests to be authenticated, meaning a user must be logged in to access any URL.
+                .formLogin(withDefaults -> {}) // Enables form-based login using default configurations.
+                .logout(withDefaults -> {}); // Enables logout functionality using default configurations.
 
         return http.build();
     }
@@ -40,12 +41,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthProviderImpl authProvider() {
-        return authProvider;
+    public PasswordEncoder getPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(personDetailsService);
     }
 }

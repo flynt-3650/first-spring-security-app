@@ -42,20 +42,19 @@ public class Person {
         this.id = id;
     }
 
-    public @NotEmpty @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters!") String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(@NotEmpty @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters!") String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    @Min(value = 1900, message = "Year of birth must be greater than 1900!")
     public int getYearOfBirth() {
         return yearOfBirth;
     }
 
-    public void setYearOfBirth(@Min(value = 1900, message = "Year of birth must be greater than 1900!") int yearOfBirth) {
+    public void setYearOfBirth(int yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
     }
 
